@@ -39,13 +39,17 @@ class PNANet(nn.Module):
         posttrans_layers = net_params['posttrans_layers']
         self.gru_enable = net_params['gru']
         device = net_params['device']
+        num_feat_e = net_params['num_feat_e']
+        num_feat_h = net_params['num_feat_h']
 
         self.in_feat_dropout = nn.Dropout(in_feat_dropout)
 
-        self.embedding_h = nn.Embedding(num_atom_type, hidden_dim)
+        # self.embedding_h = nn.Embedding(num_feat_h, hidden_dim)
+        self.embedding_h = nn.Linear(num_feat_h, hidden_dim)
 
         if self.edge_feat:
-            self.embedding_e = nn.Embedding(num_bond_type, edge_dim)
+            # self.embedding_e = nn.Embedding(num_bond_type, edge_dim)
+            self.embedding_e = nn.Linear(num_feat_e, edge_dim)
 
         self.layers = nn.ModuleList([PNALayer(in_dim=hidden_dim, out_dim=hidden_dim, dropout=dropout,
                                               graph_norm=self.graph_norm, batch_norm=self.batch_norm,
